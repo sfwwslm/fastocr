@@ -1,11 +1,11 @@
 import time
 
 import ddddocr
+import onnxruntime
 import uvicorn
 from fastapi import FastAPI, Header, applications
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.docs import get_swagger_ui_html
-from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
@@ -13,6 +13,8 @@ from pydantic import BaseModel
 # from PIL import Image
 # if not hasattr(Image, 'ANTIALIAS'):
 #     setattr(Image, 'ANTIALIAS', Image.LANCZOS)
+# 抑制警告信息
+onnxruntime.set_default_logger_severity(3)
 
 
 def swagger_monkey_patch(*args, **kwargs):
