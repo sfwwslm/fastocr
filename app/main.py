@@ -67,7 +67,7 @@ async def main():
 class RqCaptchaModel(BaseModel):
     """验证码请求模型"""
     img: str
-    # length: int
+    length: int
 
 
 class RpCaptchaModel(BaseModel):
@@ -143,11 +143,6 @@ async def new_ocr(body: RqCaptchaModel):
     ```
 
     """
-    return ocr(body)
-
-
-@app.post("/tools/ocr", response_model=RpCaptchaModel)
-async def old_ocr(body: RqCaptchaModel):
     return ocr(body)
 
 
