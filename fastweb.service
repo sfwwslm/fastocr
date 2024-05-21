@@ -1,0 +1,13 @@
+[Unit]
+Description=fastocr
+After=network.target
+
+[Service]
+ExecStart=/home/user/fastocr/.venv/bin/uvicorn app.main:app --host 0.0.0.0 --port 8020 --reload
+WorkingDirectory=/home/user/fastocr
+Restart=always
+User=user
+Group=user
+
+[Install]
+WantedBy=multi-user.target
