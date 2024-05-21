@@ -69,7 +69,7 @@ async def main():
 class RqCaptchaModel(BaseModel):
     """验证码请求模型"""
     img: str
-    length: int
+    length: int | None = None
 
 
 class RpCaptchaModel(BaseModel):
@@ -81,67 +81,85 @@ class RpCaptchaModel(BaseModel):
 
 
 @app.post("/ocr", response_model=RpCaptchaModel, name='识别验证码')
-async def new_ocr(body: RqCaptchaModel):
+async def ocr(body: RqCaptchaModel):
     """
     对验证码图像进行光学字符识别（OCR）。
 
-    参数：
+    Args：
         img：要进行OCR的验证码图像。
+        length: 预期验证码的长度。
 
-    返回：
+    Returns：
         包含OCR结果代码、结果长度和表示OCR过程状态的消息的字典。
 
-    抛出：
-        OcrError：如果在OCR过程中发生错误。
-
-    示例：
+    Examples：
 
     ```js
-    /**
-    * 对图像进行光学字符识别（OCR）。
-    * @async
-    * @param {string} img - 要进行OCR的图像。
-    * @param {number} len - 图像的长度。
-    * @param {function} f - 处理OCR结果的回调函数。
-    * @returns {Promise} - 一个解析为OCR结果的Promise。
-    * @throws {Error} - 如果网络请求失败或OCR结果不成功。
-    */
-    async function ocr(img, len, f) {
-        let response = await fetch("https://localhost/ocr", {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                "img": img,
-                "length": len
+        /**
+        * 对图像进行光学字符识别（OCR）。
+        * @async
+        * @param {string} img - 要进行OCR的图像。
+        * @param {number} len - 预期验证码的长度，如果有就校验。
+        * @param {function} f - 处理OCR结果的回调函数。
+        * @returns {Promise} - 一个解析为OCR结果的Promise。
+        * @throws {Error} - 如果网络请求失败或OCR结果不成功。
+        */
+        async function ocr(img, len, f) {
+            let response = await fetch("https://localhost/ocr", {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    "img": img,
+                    "length": len
+                })
+            }).then(response => {
+                if (!response.ok) {
+                    throw new Error('网络请求失败');
+                }
+                return response.json();
+            }).then(data => {
+                if (data.result) {
+                    return data
+                } else {
+                    throw new Error(data.message);
+                };
             })
-        }).then(response => {
-            if (!response.ok) {
-                throw new Error('网络请求失败');
-            }
-            return response.json();
-        }).then(data => {
-            if (data.result) {
-                return data
-            } else {
-                throw new Error(data.message);
-            };
-        })
-            .catch(error => { return error });
+                .catch(error => { return error });
 
-        let json = await response;
-        console.log(json);
-        // f(json);
-    }
+            let json = await response;
+            console.log(json);
+            // f(json);
+        }
 
     ```
 
     ```python
-    data = {
-    "img": data,
-    "length": 4
-    }
+    data = {"img": data,"length": 4}
     rp = requests.post(url="https://localhost/ocr", json=data, verify=False)
     print(rp.json())
+    ```
+
+    ```python
+    import base64
+    import json
+    import urllib.request
+
+    def parse(img: bytes, show: bool = False):
+        url = "http://10.121.111.124:8000/ocr"
+        data = {"img": base64.b64encode(img).decode('utf-8')}
+        data_encoded = json.dumps(data).encode('utf-8')
+
+        req = urllib.request.Request(url, data=data_encoded, method="POST")
+        req.add_header("Content-Type", "application/json")
+
+        with urllib.request.urlopen(req) as response:
+            response_data = response.read().decode('utf-8')  # 读取响应内容并解码为字符串
+
+        json_data = json.loads(response_data)
+        if show:
+            print(json_data)
+        return json_data["code"]
+
     ```
 
     """
@@ -153,7 +171,9 @@ def ocr(body: RqCaptchaModel):
     try:
         resp = ocr.classification(body.img)
     except Exception as err:
-        return {"code": resp, "length": len(resp), "result": False, "message": f"识别出现问题！{err}"}
+        return {"code": None, "length": None, "result": False, "message": f"识别出现问题！{err}"}
+    if body.length and len(resp) != body.length:
+        return {"code": None, "length": None, "result": False, "message": "验证码长度不匹配！"}
     return {"code": resp, "length": len(resp), "message": "验证码已识别！"}
 
 

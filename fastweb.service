@@ -3,7 +3,7 @@ Description=fastocr
 After=network.target
 
 [Service]
-ExecStart=/home/user/fastocr/.venv/bin/uvicorn app.main:app --host 0.0.0.0 --port 8020 --reload
+ExecStart=/home/user/fastocr/.venv/bin/uvicorn app.main:app --host 0.0.0.0 --port 20000 --reload
 WorkingDirectory=/home/user/fastocr
 Restart=always
 User=user
