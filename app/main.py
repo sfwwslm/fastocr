@@ -166,17 +166,30 @@ async def ocr(body: RqCaptchaModel):
     return ocr(body)
 
 
+def check_data(data: str):
+    if data.startswith("data:image/"):
+        return data.split(',')[1]
+    return data
+
+
 def ocr(body: RqCaptchaModel):
     ocr = ddddocr.DdddOcr(beta=True, show_ad=False)
     try:
-        resp = ocr.classification(body.img)
+        base64_data = check_data(body.img)
+        resp = ocr.classification(base64_data)
     except Exception as err:
-        return {"code": None, "length": None, "result": False, "message": f"识别出现问题！{err}"}
+        error = {"code": None, "length": None,
+                 "result": False, "message": f"识别出现问题！{err}"}
+        print(error)
+        return error
     if body.length and len(resp) != body.length:
-        return {"code": None, "length": None, "result": False, "message": "验证码长度不匹配！"}
+        error = {"code": None, "length": None,
+                 "result": False, "message": "验证码长度不匹配！"}
+        print(error)
+        return error
     return {"code": resp, "length": len(resp), "message": "验证码已识别！"}
 
 
 if __name__ == '__main__':
-    # uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
-    uvicorn.run(app='main:app', host='::', port=8000, reload=True)
+    # uvicorn app.main:app --reload --host 0.0.0.0 --port 20000
+    uvicorn.run(app='main:app', host='::', port=20000, reload=True)
