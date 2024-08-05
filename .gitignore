@@ -1,11 +1,6 @@
 # my ------
 .idea
-*.txt
-*.zip
-*.temp
-!requirements.txt
-*_tmp.py
-temp_*
+!requirements*
 
 ### Python template
 # Byte-compiled / optimized / DLL files
