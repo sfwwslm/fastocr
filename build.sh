@@ -4,11 +4,17 @@
 echo "从 pyproject.toml 读取版本号..."
 
 version=$(awk -F' *= *' '/^version *= */ {gsub(/"/, "", $2); print $2}' pyproject.toml)
+name=$(awk -F' *= *' '/^name *= */ {gsub(/"/, "", $2); print $2}' pyproject.toml)
 
-echo "Version: $version"
+if [ -n "$version" ]; then
+    echo "Version: $version"
+else
+    echo "Version not found."
+    exit 1
+fi
 
 echo "开始构建镜像..."
-sudo docker build -t "fastocr:$version" .
+sudo docker build -t "$name:$version" .
 
 echo "查看镜像列表..."
 sudo docker images
