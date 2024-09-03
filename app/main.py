@@ -36,7 +36,7 @@ async def sleep(x_sleep: int | None = Header(default=None, description="设置�
 
 
 # app = FastAPI(dependencies=[Depends(sleep)])
-app = FastAPI(dependencies=[])
+app = FastAPI(dependencies=[], docs_url=None, redoc_url=None)
 
 # 将静态文件路径映射到指定的目录
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
