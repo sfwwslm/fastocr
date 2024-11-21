@@ -8,7 +8,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "fastocr"
-version = "0.0.2"
+version = "0.0.3"
 authors = [
     { name = "sfwwslm", email = "sfwwslm@gmail.com" },
 ]
@@ -22,11 +22,22 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 
+dependencies = [
+    "fastapi",
+    "uvicorn",
+    "ddddocr",
+]
+[project.optional-dependencies]
+dev = [
+    "httpx",
+    "black"
+]
+
 [project.urls]
 Homepage = "https://github.com/sfwwslm/fastocr"
 Issues = "https://github.com/sfwwslm/fastocr/issues"
 
-[tool.hatch.build.targets.sdist]
+[tool.hatch.build.targets.wheel]
 include = [
     "/app",
     "/README.md",
