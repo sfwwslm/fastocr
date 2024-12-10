@@ -8,13 +8,13 @@ build-backend = "hatchling.build"
 
 [project]
 name = "fastocr"
-version = "0.0.3"
+version = "0.0.1"
 authors = [
     { name = "sfwwslm", email = "sfwwslm@gmail.com" },
 ]
 description = "ocr 识别"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.12"
 license = "MIT"
 classifiers = [
     "Programming Language :: Python :: 3",
@@ -23,14 +23,14 @@ classifiers = [
 ]
 
 dependencies = [
-    "fastapi",
-    "uvicorn",
-    "ddddocr",
+    "fastapi==0.115.6",
+    "uvicorn==0.32.1",
+    "ddddocr==1.5.6",
+    "httpx==0.28.1",
 ]
 [project.optional-dependencies]
 dev = [
-    "httpx",
-    "black"
+    "black",
 ]
 
 [project.urls]
