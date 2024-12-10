@@ -1,9 +1,7 @@
-import time
-
 import ddddocr
 import onnxruntime
 import uvicorn
-from fastapi import FastAPI, Header, applications
+from fastapi import FastAPI, applications
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.docs import get_swagger_ui_html
 from fastapi.staticfiles import StaticFiles
@@ -31,18 +29,8 @@ def swagger_monkey_patch(*args, **kwargs):
 
 applications.get_swagger_ui_html = swagger_monkey_patch
 
-
-async def sleep(
-    x_sleep: int | None = Header(default=None, description="设置延迟响应时间(秒)")
-):
-    if x_sleep:
-        time.sleep(x_sleep)
-
-
-# app = FastAPI(dependencies=[Depends(sleep)])
 app = FastAPI(dependencies=[], docs_url=None, redoc_url=None)
 
-# 将静态文件路径映射到指定的目录
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
 
@@ -218,5 +206,4 @@ def ocr(body: RqCaptchaModel):
 
 
 if __name__ == "__main__":
-    # uvicorn app.main:app --reload --host 0.0.0.0 --port 20000
     uvicorn.run(app="main:app", host="0.0.0.0", port=20000, reload=True)
