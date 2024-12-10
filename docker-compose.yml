@@ -1,0 +1,8 @@
+services:
+  fastocr:
+    build: .
+    image: fastocr:latest
+    container_name: fastocr
+    ports:
+      - "20000:20000"
+    restart: always
