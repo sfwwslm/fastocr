@@ -1,7 +1,7 @@
 import ddddocr
 import onnxruntime
 import uvicorn
-from fastapi import FastAPI, applications
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.docs import get_swagger_ui_html
 from fastapi.responses import HTMLResponse
@@ -15,20 +15,6 @@ from pydantic import BaseModel
 #     setattr(Image, 'ANTIALIAS', Image.LANCZOS)
 # 抑制警告信息
 onnxruntime.set_default_logger_severity(3)
-
-
-def swagger_monkey_patch(*args, **kwargs):
-    return get_swagger_ui_html(
-        *args,
-        **kwargs,
-        swagger_js_url="/static/js/swagger-ui-bundle.js",
-        # swagger_js_url='https://cdn.bootcdn.net/ajax/libs/swagger-ui/4.10.3/swagger-ui-bundle.js',
-        swagger_css_url="/static/css/swagger-ui.css",
-        # swagger_css_url='https://cdn.bootcdn.net/ajax/libs/swagger-ui/4.10.3/swagger-ui.css'
-    )
-
-
-applications.get_swagger_ui_html = swagger_monkey_patch
 
 app = FastAPI(dependencies=[], docs_url=None, redoc_url=None)
 
@@ -50,6 +36,20 @@ app.add_middleware(
 )
 
 
+@app.get("/docs", include_in_schema=False)
+async def custom_swagger_ui_html():
+    # 添加判断确保 openapi_url 存在
+    if app.openapi_url is None:
+        raise Exception("OpenAPI schema URL is not available")
+    return get_swagger_ui_html(
+        openapi_url=app.openapi_url,
+        title="使用说明",
+        oauth2_redirect_url=app.swagger_ui_oauth2_redirect_url,
+        swagger_js_url="/static/js/swagger-ui-bundle.js",
+        swagger_css_url="/static/css/swagger-ui.css",
+    )
+
+
 class ReqModel(BaseModel):
     """验证码请求模型"""
 
@@ -67,7 +67,7 @@ class ResModel(BaseModel):
 
 
 @app.post("/ocr", response_model=ResModel, name="识别验证码")
-async def ocr(body: ReqModel):
+async def main(body: ReqModel):
     """
     对验证码图像进行光学字符识别（OCR）。
 
