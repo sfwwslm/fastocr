@@ -6,7 +6,7 @@ anyio==4.9.0
     # via
     #   httpx
     #   starlette
-certifi==2025.4.26
+certifi==2025.7.14
     # via
     #   httpcore
     #   httpx
@@ -16,7 +16,7 @@ coloredlogs==15.0.1
     # via onnxruntime
 ddddocr==1.5.6
     # via fastocr (pyproject.toml)
-fastapi==0.115.12
+fastapi==0.116.1
     # via fastocr (pyproject.toml)
 flatbuffers==25.2.10
     # via onnxruntime
@@ -36,39 +36,40 @@ idna==3.10
     #   httpx
 mpmath==1.3.0
     # via sympy
-numpy==2.3.0
+numpy==2.3.1
     # via
     #   ddddocr
     #   onnxruntime
     #   opencv-python-headless
-onnxruntime==1.22.0
+onnxruntime==1.22.1
     # via ddddocr
 opencv-python-headless==4.11.0.86
     # via ddddocr
 packaging==25.0
     # via onnxruntime
-pillow==11.2.1
+pillow==11.3.0
     # via ddddocr
 protobuf==6.31.1
     # via onnxruntime
-pydantic==2.11.5
+pydantic==2.11.7
     # via fastapi
 pydantic-core==2.33.2
     # via pydantic
 sniffio==1.3.1
     # via anyio
-starlette==0.46.2
+starlette==0.47.2
     # via fastapi
 sympy==1.14.0
     # via onnxruntime
-typing-extensions==4.14.0
+typing-extensions==4.14.1
     # via
     #   anyio
     #   fastapi
     #   pydantic
     #   pydantic-core
+    #   starlette
     #   typing-inspection
 typing-inspection==0.4.1
     # via pydantic
-uvicorn==0.34.3
+uvicorn==0.35.0
     # via fastocr (pyproject.toml)
