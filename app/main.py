@@ -1,5 +1,4 @@
 import ddddocr
-import onnxruntime
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -9,12 +8,6 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.testclient import TestClient
 from pydantic import BaseModel
 
-# Pillow==9.5.0 依赖问题
-# from PIL import Image
-# if not hasattr(Image, 'ANTIALIAS'):
-#     setattr(Image, 'ANTIALIAS', Image.LANCZOS)
-# 抑制警告信息
-onnxruntime.set_default_logger_severity(3)
 
 app = FastAPI(dependencies=[], docs_url=None, redoc_url=None)
 
