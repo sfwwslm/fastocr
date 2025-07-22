@@ -1,6 +1,6 @@
 [project]
 name = "fastocr"
-version = "0.1.0"
+version = "0.1.1"
 authors = [
     { name = "sfwwslm", email = "sfwwslm@gmail.com" },
 ]
@@ -9,7 +9,7 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "httpx",
-    "fastapi",
+    "fastapi==0.116.1",
     "uvicorn",
     "ddddocr==1.5.6"
 ]
