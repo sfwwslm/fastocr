@@ -1,15 +1,15 @@
 [project]
 name = "fastocr"
-version = "0.1.1"
+version = "0.1.2"
 authors = [
     { name = "sfwwslm", email = "sfwwslm@gmail.com" },
 ]
 description = "基于 FastAPI 和 ddddocr 的 OCR API 服务"
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.13"
 dependencies = [
     "httpx",
-    "fastapi==0.116.1",
+    "fastapi==0.121.0",
     "uvicorn",
     "ddddocr==1.5.6"
 ]
